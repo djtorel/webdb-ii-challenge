@@ -11,4 +11,16 @@ router.get('/', async (req, res) => {
   }
 });
 
+router.post('/', async (req, res) => {
+  const carData = req.body;
+
+  try {
+    const [id] = await db('cars').insert(carData);
+    const [newCar] = await db('cars').where({ id });
+    res.status(201).json(newCar);
+  } catch (err) {
+    res.status(500).json({ message: 'failed to add car', error: err });
+  }
+});
+
 module.exports = router;
